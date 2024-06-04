@@ -184,19 +184,122 @@ Now our todo list app actually looks a bit more like a real app! The problem is:
 Now our todo list app actually looks a bit more like a real app! The problem is : it doesn't actually do anything.We'll start fixing that in the next chapter!
 
 
+# Componentizing our React app
+https://developer.mozilla.org/en-US/docs/Learn/Tools_and_testing/Client-side_JavaScript_frameworks/React_components
+
+At this point, our app is a monolith. Before we can make it do things, we need to break it apart into manageable, descriptive components. 
+React doesn't have any hard rules for what is and isn't a component – that's up to you! In this article we will show you a sensible way to break our app up into components.
+
+At this point, our app is a monolith. Before we can make it do things, we need to break it apart into manageable, descriptive components.
+React doesn't have any hard rules for what is and isn't a component - that's up to you ! In this article we will show you a sensible way to break our app up into 
+components.
+
+
+## Defining our first component
+Defining a component can seem tricky until you have some practice, but the gist is:
+
+If it represents an obvious "chunk" of your app, it's probably a component
+If it gets reused often, it's probably a component.
+That second bullet is especially valuable: making a component out of common UI elements allows you to change your code in one place and see those changes everywhere that component is used. You don't have to break everything out into components right away, either. Let's take the second bullet point as inspiration and make a component out of the most reused, most important piece of the UI: a todo list item.
+
+Defining a component can seem tricky until you have some practice, but the gist is :
+
+If it represents an obvious "Chunk" of your app, it's probably a component
+If it gets reused often, it's probably a component .
+That second bullet is especially valuable: making a component out of common UI elements allows you to change your code in one place and see those changes everywhere
+that component is used. You don't have to break everything out into components right away, either. Let's take the second bullent point as inspiration and make a component out of the most reused, most important piece of the UI: a todo list item.
+
+## Make a unique <Todo />
+Components are powerful because they let us re-use pieces of our UI, and refer to one place for the source of that UI. The problem is, we don't typically want to reuse all of each component; we want to reuse most parts, and change small pieces. This is where props come in.
+
+Components are powerful because they let us rel-use pieces of our UI, and refer to one place
+for the source of that UI. The problem is, we don't typically want to reuse all of each component; we want to reuse most parts, and change small pieces.This is where props come in.
+
+![alt text](image.png)
+
+
+## What's in a name?
+In order to track the names of tasks we want to complete, we should ensure that each <Todo /> component renders a unique name.
+In App.jsx, give each <Todo /> a name prop. Let's use the names of our tasks that we had before:
+
+
+//When your browser refreshes, you will see… the exact same thing as before. We gave our <Todo /> some props, but we aren't using them yet. Let's go back to Todo.jsx and remedy that.
+
+First modify your Todo() function definition so that it takes props as a parameter. You can console.log() your props if you'd like to check that they are being received by the component correctly.
+
+Once you're confident that your component is getting its props, you can replace every occurrence of Eat with your name prop by reading props.name. Remember: props.name is a JSX expression, so you'll need to wrap it in curly braces.
+
+Putting all that together, your Todo() function should read like this:
+
+When your browser refreshes, you will see... the exact same thing as before.We gave our <Todo /> some props, but 
+we aren't using them yet.Let's go back to Todo. jsx and remedy that.
+First modify your Todo() function definition so that it takes props as a parameter.You can console.log()
+your props if you'd like to check that they are being received by the component correctly.
+
+Once you're confident that your component is getting its props, you can replace every occurrence of Eat with your name prop by reading props.name. Remember: props.name is a JSX expression, so you'll need to wrap it in curly braces.
+Putting all that together, your Todo()function should read like this.
+
+# Is it completed?
+In our original static list, only Eat was checked. Once again, we want to reuse most of the UI that makes up a <Todo /> component, but change one thing. That's a good job for another prop! Give your first <Todo /> call a boolean prop of completed, and leave the other two as they are.
+
+Is it completed?
+In our original static list, only Eat was checked. Once again, we want to reuse most of the UI that makes up a 
+<Todo /> component, but change one thing. That's a good job for another prop! Give your first <Todo /> call a boolean prop of completed, and leave the other two as they are.
+
+If you change each <Todo /> component's completed prop, your browser will check or uncheck the equivalent rendered checkboxes accordingly.
+
+If you change each <Todo />component's completed prop, your browser will check or uncheck the equivalent rendered checkboxes accordingly.
+
+Gimme some id, please
+We have still another problem: our <Todo /> component gives every task an id attribute of todo-0. This is bad for a couple of reasons:
+// id attributes must be unique (they are used as unique identifiers for document fragments,) by CSS, JavaScript, etc.).
+When ids are not unique,the funcitonality of label elements can break.
+
+
+id attributes must be unique (they are used as unique identifiers for document fragments, 
+by CSS, JavaScript, etc.).
+When ids are not unique, the functionality of label elements can break.
+
+Note: The completed prop is last here because it is a boolean with no assignment. This is purely a stylistic convention. The order of props does not matter because props are JavaScript objects, and JavaScript objects are unordered.
+
+Note: The completed prop is last here because it is a boolean with no assignment . This is purely a stylistic convention.
+The order of props does not matter because props are JavaScript objects, and JavaScript objects are unordered.
+
+We can clean up our code with one of JavaScript's core abilities: iteration. To use iteration, we should first re-think our tasks.
+
+We can clean up our code with one of JavaScript's core abilities: iteration. To use iteration, we should first
+re-think our tasks.
 
 
 
+、、Note: ALL_CAPS constant names have no special meaning in JavaScript; they're a convention that tells other developers "this data will never change after being defined here".
+Note: All_CAPS constant names have no special meaning in JavaScript ; they're a convention that tells other developers "this data will never change after being defined here".
 
+JSX
+Copy to Clipboard
+<ul
+  role="list"
+  className="todo-list stack-large stack-exception"
+  aria-labelledby="list-heading">
+  {taskList}
+</ul>
+This gets us some of the way towards showing all the components again, but we've got more work to do: the browser currently renders each task's name as plain text. We're missing our HTML structure — the <li> and its checkboxes and buttons!
 
+//This gets us some of the way towards showing all the components again, but we've got more work to do: the browser
+currently renders each task's name as plain text. We're missing our HTML structure -the <li> and its checkboxes and buttons!
 
+![alt text](image-1.png)
 
+Now the app looks like it did before, and our code is less repetitive.
 
+Now the app looks like it did before, and our code is less repetitive.
 
+## Unique keys
+You should always pass a unique key to anything you render with iteration. Nothing obvious will change in your browser, but if you do not use unique keys, React will log warnings to your console and your app may behave strangely!
 
+You should always pass a unique key to anything you  render with iteration. Nothing obvious will change in your 
+browser, but if you do not use unique keys, React will log warnings to your console and your app may behave strangely!
 
-
-
-
-
-
+With this in place, your React app should render basically the same as it did before, but using your shiny new components.
+With this in place, your React app should render basically the same as it did before,but using your shiny new 
+components.
