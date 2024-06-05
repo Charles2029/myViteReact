@@ -303,3 +303,135 @@ browser, but if you do not use unique keys, React will log warnings to your cons
 With this in place, your React app should render basically the same as it did before, but using your shiny new components.
 With this in place, your React app should render basically the same as it did before,but using your shiny new 
 components.
+在编程中,`vanilla`这个词通常用来指**纯净、原生、未经修改的**代码或框架。
+
+具体来说:
+
+1. **Vanilla JavaScript**:
+   - 指纯粹使用 JavaScript 语言,没有使用任何第三方库或框架(如 jQuery、React、Angular 等)。
+   - 这种 JavaScript 代码是没有任何依赖和附加功能的基础 JavaScript 代码。
+
+2. **Vanilla CSS**:
+   - 指纯粹使用 CSS 语言,没有使用任何 CSS 预处理器(如 Sass、Less、Stylus)或 CSS 框架(如 Bootstrap、Foundation)。
+   - 这种 CSS 代码是没有任何复杂功能的基础 CSS 代码。
+
+3. **Vanilla Web Development**:
+   - 指不使用任何 JavaScript 框架或库,只使用原生 JavaScript 进行 Web 开发。
+   - 这种开发方式更加关注基础知识和底层原理,不依赖任何框架或库的功能。
+
+使用 vanilla 方式有以下优点:
+
+- **更轻量**: 没有框架或库的额外代码,网页加载更快。
+- **更灵活**: 不受框架或库的限制,可以根据需求进行定制开发。
+- **更易维护**: 代码结构更清晰,更容易理解和维护。
+- **更易学**: 学习原生 JavaScript 和 CSS 是掌握 Web 开发基础的关键。
+
+当然,使用框架或库也有其优点,如提高开发效率、添加更多功能等。因此,实际开发中需要根据具体需求,权衡使用 vanilla 还是框架的利弊。
+
+<button type="button" onClick={() => alert("hi!")}>
+  Say hi!
+</button>
+
+<button type="button" onClick={() =>alert("hi!")}>
+Say hi!
+</button>
+In this example, we're adding an onClick attribute to the <button>element. The value of that attribute is a function that triggers a simple alert. This may seem counter to best practice advice about not writing event listeners in HTML, but remember: JSX is not HTML.
+The camel-cased nature of onClick is important - JSX will  not recognize onclick (again,it is already used in JavaScript for a specific purpose, which is related but different - standard onclick handler properties).
+All browser events follow this format in JSX-on, followed by the name of the event.
+Let's apply this to our app, starting in the Form.jsx component.
+
+## Persisting and changing data with state
+So far, we've used props to pass data through our components and this has served us just fine. Now that we're dealing with interactivity, however, we need the ability to create new data, retain it, and update it later. Props are not the right tool for this job because they are immutable — a component cannot change or create its own props.
+--**Props**-- are not the right tool for this job because they are immutable - a component cannot change or create its own props.
+
+This is where state comes in. If we think of props as a way to communicate between components, we can think of state as a way to give components "memory" – information they can hold onto and update as needed.
+
+React provides a special function for introducing state to a component, aptly named useState().
+This is where state comes in. If we think of props as a way to communicate between components, we can think of state as a way to gibe components "memory - information they can hold onto and update as needed.
+
+Note: useState() is part of a special category of functions called hooks, each of which can be used to add new functionality to a component. We'll learn about other hooks later on.
+
+Note: useState() is part of special category of functions called hooks, each of which can be used to add new functionality to a component. 
+
+useState() takes a single argument that determines the initial value of the state. This argument can be a string, a number, an array, an object, or any other JavaScript data type. useState() returns an array containing two items. The first item is the current value of the state; the second item is a function that can be used to update the state.
+
+Let's create a name state. Write the following above your handleSubmit() function, inside Form():
+
+// useState() takes a single argument that determines the initial value of the state. This argument can be a string, a number ,an array, an object, or any other JavaScript data type. useState() returns an array containing two items. The first item is the current value of the state; the second item is a function that can be used to update the state.
+const [name, setName] = useState("Learn React");
+
+
+//Several things are happening in this line of code:
+
+We are defining a name constant with the value "Learn React".
+We are defining a function whose job it is to modify name, called setName().
+useState() returns these two things in an array, so we are using array destructuring to capture them both in separate variables.
+// Several things are happening in this line of code:
+We are defining a name constant with the value "Learn React".
+We are defining a function whose job it is to modify name, called setName().
+useState() returns these two things in an array, so we are suing array destructuring to capture them both in separate variables.
+
+
+Change "Learn React" to an empty string once you're done; this is what we want for our initial state:
+
+
+const [name, setName] = useState("");
+
+Change "Learn React" to an empty string once you're done; this is what we want for our initial state:
+const [name, setName] = useState("");
+
+
+# Updating state
+Logging isn't enough - we want to actually store what the user types and render it in the input! change your 
+console.log() call to setName(), as shown below:
+Logging isn't enough — we want to actually store what the user types and render it in the input! Change your console.log() call to setName(), as shown below:
+
+function handleChange(event) {
+  console.log(event.target.value);
+}
+
+
+
+Note: You'll notice that you are able to submit empty tasks by just pressing the Add button without entering a task name. Can you think of a way to prevent this? As a hint, you probably need to add some kind of check into the handleSubmit() function.
+
+Note: You'll notice that  you are able to submit empty tasks by just pressing the Add button without entering a task
+name. Can you think of a way to prevent this?
+
+## Putting it all together: Adding a task
+Now that we've practiced with events, callback props, and hooks, we're ready to write functionality that will allow a user to add a new task from their browser.##
+
+Now that we've practiced with events, callback props, and hooks, we're ready to write functionality that will allow a user to add a new task from their browser.
+
+We need to fix this. Making unique identifiers i
+s a hard problem – one for which the JavaScript community has written some helpful libraries. We'll use nanoid because it's tiny and it works.
+
+Make sure you're in the root directory of your application and run the following terminal command:
+
+This javaScript nanoid library is important
+## Completing a task
+
+You might notice that, when you click on a checkbox, it checks and unchecks appropriately. As a feature of HTML, the browser knows how to remember which checkbox inputs are checked or unchecked without our help. 
+//This feature hides a problem, however: toggling a checkbox doesn't change the state in our React application. This means that the browser and our app are now out-of-sync. We have to write our own code to put the browser back in sync with our app.
+
+This feature hides a problem, however: toggling a checkbox doesn't change the state in our React application.
+This means that the browser and our app are now out-of -sync. We have to write our own code to put the browser back in sync with our app.
+
+# Summary
+That's enough for one article. Here we've given you the lowdown on how React deals with events and handles state, and implemented functionality to add tasks, delete tasks, and toggle tasks as completed. We are nearly there. In the next article we'll implement functionality to edit existing tasks and filter the list of tasks between all, completed, and incomplete tasks. We'll look at conditional UI rendering along the way.
+That's enough for one article. Here we've given you the lowdown on how React deals with events and handles state, and implemented functionality to add tasks, delete tasks, and toggle tasks as completed. We are nearly there. In the next article we'll implement functionality to edit existing tasks and filter the list of tasks between all, 
+completed, and incomplete tasks. 
+
+# React interactivity: Editing, filtering, conditional rendering
+review the We'll use Array.prototype.map() instead of Array.prototype.filter()  and spread 
+
+
+We've now got the two different template structures-"edit" and "view"- defined inside two separate constants.
+This means that the return statement of <Todo /> is now repetiious -it also contains a definition of the "view"
+template.We can clean this up by using conditional rendering to determine which template the component returns,
+and is therefore rendered in the UI.
+
+# Toggling the <Todo /> templates
+
+
+Note: We are defining these constants outside our App() function because if they were defined inside it, they would
+be recalculated every time the <App /> component re-renders, and we don't want that. This information will never change no matter what our application does.
